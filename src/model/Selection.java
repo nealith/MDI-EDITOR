@@ -1,3 +1,5 @@
+package model;
+
 public class Selection{
 
   private int beginning;
@@ -45,6 +47,6 @@ public class Selection{
   * @param l  length of the selection
   **/
   public void setLength(int l){
-    if(l>0){this.legth = l;}
+    if(l>0){this.length = l;}
   }
 }

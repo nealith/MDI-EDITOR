@@ -1,3 +1,5 @@
+package view;
+
 import javax.swing.JFrame;
 import javax.swing.JEditorPane;
 import java.util.Observer;
@@ -27,7 +29,7 @@ public class UI extends JFrame implements Observer{
   **/
   public static UI getInstance(){
     if(ui == null){
-      return new UI();
+      ui = new UI();
     }
     return ui;
   }
@@ -44,7 +46,7 @@ public class UI extends JFrame implements Observer{
   }
 
   // Test de l'interface utilisateur
-  public static void main(String[] args) {
+  /*public static void main(String[] args) {
     UI u = UI.getInstance();
-  }
+  }*/
 }

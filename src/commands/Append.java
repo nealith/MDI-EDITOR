@@ -13,6 +13,6 @@ public class Append implements Command {
   }
 
   public void execute(){
-    Text.getInstance().append(c,pos);
+    Text.getInstance().append(this.character,this.pos);
   }
 }
