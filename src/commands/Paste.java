@@ -1,5 +1,8 @@
 package commands;
 
+import model.Text;
+import model.Selection;
+
 public class Paste extends SelectionCommand{
 
   public Paste(Selection selection){

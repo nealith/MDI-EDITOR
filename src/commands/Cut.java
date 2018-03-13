@@ -1,5 +1,8 @@
 package commands;
 
+import model.Text;
+import model.Selection;
+
 public class Cut extends SelectionCommand{
 
   public Cut(Selection selection){
