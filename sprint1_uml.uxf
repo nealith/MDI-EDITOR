@@ -11,7 +11,7 @@
     </coordinates>
     <panel_attributes>Text
 --
--buffer : BufferString
+-buffer : StringBuffer
 --
 +Text()
 +append(c : char, i : int) : void
@@ -89,8 +89,8 @@ execute()</panel_attributes>
     </coordinates>
     <panel_attributes>Selection
 --
--beginning
--length
+-beginning : int
+-length : int
 --
 -setBeginning(beginning : int) : void
 -getBeginning() : int
