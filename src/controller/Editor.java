@@ -7,12 +7,12 @@ import model.*;
 public class Editor{
 
   private UI main_window;
-  //private Text texte;
+  private Text texte;
   static private Editor editeur = null;
 
   private Editor(){
     main_window = UI.getInstance();
-    //texte = new Text();
+    texte = Text.getInstance();
   }
 
   static public Editor getInstance(){
@@ -22,9 +22,9 @@ public class Editor{
     return editeur;
   }
 
-/*  public Text getModel(){
+  public Text getModel(){
     return this.texte;
-  }*/
+  }
 
   public UI getUI(){
     return this.main_window;

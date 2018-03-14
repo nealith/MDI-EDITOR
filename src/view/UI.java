@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JEditorPane;
 import java.util.Observer;
 import java.util.Observable;
+import java.awt.event.*;
 
 public class UI extends JFrame implements Observer{
 
@@ -19,6 +20,8 @@ public class UI extends JFrame implements Observer{
     this.setSize(500,450);
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setVisible(true);
+
+    editorPanel.addMouseListener(new SelectionListener(this.editorPanel));
   }
 
 
@@ -49,4 +52,30 @@ public class UI extends JFrame implements Observer{
   /*public static void main(String[] args) {
     UI u = UI.getInstance();
   }*/
+
+  class SelectionListener implements MouseListener{
+
+    private JEditorPane panel;
+
+    public SelectionListener(JEditorPane p){
+      this.panel = p;
+    }
+
+    public void mouseClicked(MouseEvent e){
+
+    }
+
+    public void mouseEntered(MouseEvent e){}
+
+    public void 	mouseExited(MouseEvent e){}
+
+    public void 	mousePressed(MouseEvent e){}
+
+    public void 	mouseReleased(MouseEvent e){
+      System.out.println("Hey");
+      System.out.println(panel.getSelectionStart());
+      System.out.println(panel.getSelectionEnd());
+      
+    }
+  }
 }
