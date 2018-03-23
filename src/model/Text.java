@@ -8,6 +8,8 @@ package model;
 
 import model.Selection;
 import java.util.Observable;
+import model.ClipBoard;
+import view.UI;
 
 public class Text extends Observable {
 
@@ -19,10 +21,12 @@ public class Text extends Observable {
 	/**
 	 //* the clipboard object which contains the copied text
 	 */
-	//private ClipBoard clipboard;
+	private ClipBoard clipboard;
 
 	private Text(){
-
+    buffer = new StringBuffer();
+    clipboard = new ClipBoard();
+    this.addObserver(UI.getInstance());
 	}
 
   static public Text getInstance(){
@@ -58,9 +62,12 @@ public class Text extends Observable {
 	public void copy(Selection selection){
 		//assert((selection.getBeginning()+selection.getLength())<buffer.getLength(), "The selection end is at an offset of buffer");
 		//assert((selection.getBeginning())>=0, "The selection getBeginning() is under 0");
-		String s = new String();
+    if(selection.getLength()>0){
+
+    String s = new String();
 		s = buffer.substring(selection.getBeginning(), selection.getBeginning()+selection.getLength());
-		//clipboard.setContent(s);
+		clipboard.setContent(s);
+    }
 	}
 
 	/**
@@ -80,9 +87,12 @@ public class Text extends Observable {
 	 * @param selection the text that will be erased. Can be empty
 	 */
 	public void paste(Selection selection){
-		//buffer.remove(selection);
-		//String s = clipboard.getContent();
-		//buffer.insert(selection.getBeginning(),s);
+		buffer.delete(selection.getBeginning(),selection.getBeginning()+selection.getLength());
+		String s = clipboard.getContent();
+		buffer.insert(selection.getBeginning(),s);
+    System.out.println(buffer.toString());
+    setChanged();
+    this.notifyObservers(UI.getInstance());
 	}
 
 	/**
@@ -93,4 +103,13 @@ public class Text extends Observable {
 		//assert((selection.getBeginning()+selection.getLength())<buffer.getLength(), "The selection end is at an offset of buffer");
 		//assert((selection.getBeginning())>=0, "The selection getBeginning() is under 0");
 	}
+
+  public void setText(String s){
+    buffer.replace(0,buffer.length(),s);
+    System.out.println(buffer.toString());
+  }
+
+  public String getText(){
+    return buffer.toString();
+  }
 }

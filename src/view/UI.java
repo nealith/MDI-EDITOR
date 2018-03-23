@@ -5,6 +5,9 @@ import javax.swing.JEditorPane;
 import java.util.Observer;
 import java.util.Observable;
 import java.awt.event.*;
+import controller.*;
+import model.*;
+import commands.*;
 
 public class UI extends JFrame implements Observer{
 
@@ -22,6 +25,7 @@ public class UI extends JFrame implements Observer{
     this.setVisible(true);
 
     editorPanel.addMouseListener(new SelectionListener(this.editorPanel));
+    editorPanel.addKeyListener(new CommandListener(this.editorPanel));
   }
 
 
@@ -39,13 +43,14 @@ public class UI extends JFrame implements Observer{
 
 
   /**
-  * Singleton Pattern
+  * Observer Pattern
   *
   * @param o  The Observable
   * @param arg woui
   **/
   public void update(Observable o, Object arg){
-
+    System.out.println("Hey");
+    editorPanel.setText(Text.getInstance().getText());
   }
 
   // Test de l'interface utilisateur
@@ -73,9 +78,49 @@ public class UI extends JFrame implements Observer{
 
     public void 	mouseReleased(MouseEvent e){
       System.out.println("Hey");
-      System.out.println(panel.getSelectionStart());
-      System.out.println(panel.getSelectionEnd());
-      
+      int deb = panel.getSelectionStart();
+      int len = panel.getSelectionEnd()-deb;
+      //if(len>0){
+        Editor.getInstance().setSelection(new Selection(deb,len));
+      //}
+
+    }
+  }
+
+  class CommandListener implements KeyListener{
+
+    private boolean isCommand;
+    private JEditorPane panel;
+
+    public CommandListener(JEditorPane p){
+      isCommand = false;
+      panel = p;
+    }
+
+    public void keyPressed(KeyEvent e){
+      if(e.getKeyCode()==KeyEvent.VK_CONTROL){
+        isCommand = true;
+      }
+      if(isCommand){
+        switch(e.getKeyCode()){
+            case KeyEvent.VK_I : Cut c = new Cut(Editor.getInstance().getSelection());c.execute();
+            break;
+            case KeyEvent.VK_O : Copy co = new Copy(Editor.getInstance().getSelection());co.execute();
+            break;
+            case KeyEvent.VK_P : Paste p = new Paste(Editor.getInstance().getSelection());p.execute();
+            break;
+            default:;
+        }
+      }
+    }
+    public void keyReleased(KeyEvent e){
+      if(e.getKeyCode()==KeyEvent.VK_CONTROL){
+        isCommand = false;
+      }
+      Text.getInstance().setText(panel.getText());
+    }
+    public void keyTyped(KeyEvent e){
+
     }
   }
 }
