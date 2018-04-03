@@ -43,12 +43,13 @@ public class Text extends Observable {
 	 */
 	public void append(char c, int i){
 		//assert(i<buffer.getLength(), "The character can not be inserted at buffer offset");
+    System.out.println("Insert : "+c+" at "+i);
     if(i>buffer.length()){
       buffer.append(c);
     }else{
       buffer.insert(i,c);
     }
-    
+
     setChanged();
     notifyObservers(UI.getInstance());
 	}
