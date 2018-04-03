@@ -43,7 +43,14 @@ public class Text extends Observable {
 	 */
 	public void append(char c, int i){
 		//assert(i<buffer.getLength(), "The character can not be inserted at buffer offset");
-		buffer.insert(i,c);
+    if(i>buffer.length()){
+      buffer.append(c);
+    }else{
+      buffer.insert(i,c);
+    }
+    
+    setChanged();
+    notifyObservers(UI.getInstance());
 	}
 
 	/**
@@ -53,6 +60,8 @@ public class Text extends Observable {
 	public void removeAt(int i){
 		//assert(i<buffer.getLength(), "The character can not be inserted at buffer offset");
 		buffer.deleteCharAt(i);
+    setChanged();
+    notifyObservers(UI.getInstance());
 	}
 
 	/**
@@ -79,6 +88,9 @@ public class Text extends Observable {
 		//assert((selection.getBeginning())>=0, "The selection getBeginning() is under 0");
 		this.copy(selection);
 		this.remove(selection);
+
+    setChanged();
+    this.notifyObservers(UI.getInstance());
 	}
 
 
@@ -87,10 +99,12 @@ public class Text extends Observable {
 	 * @param selection the text that will be erased. Can be empty
 	 */
 	public void paste(Selection selection){
-		buffer.delete(selection.getBeginning(),selection.getBeginning()+selection.getLength());
+    if(selection.getLength()>0){
+      buffer.delete(selection.getBeginning(),selection.getBeginning()+selection.getLength());
+    }
 		String s = clipboard.getContent();
 		buffer.insert(selection.getBeginning(),s);
-    System.out.println(buffer.toString());
+
     setChanged();
     this.notifyObservers(UI.getInstance());
 	}
@@ -102,6 +116,9 @@ public class Text extends Observable {
 	public void remove(Selection selection){
 		//assert((selection.getBeginning()+selection.getLength())<buffer.getLength(), "The selection end is at an offset of buffer");
 		//assert((selection.getBeginning())>=0, "The selection getBeginning() is under 0");
+    buffer.replace(selection.getBeginning(),selection.getBeginning()+selection.getLength(),new String());
+    setChanged();
+    this.notifyObservers(UI.getInstance());
 	}
 
   public void setText(String s){
@@ -111,5 +128,9 @@ public class Text extends Observable {
 
   public String getText(){
     return buffer.toString();
+  }
+
+  public int getLength(){
+    return buffer.length();
   }
 }

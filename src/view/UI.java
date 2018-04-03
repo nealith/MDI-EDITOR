@@ -102,22 +102,48 @@ public class UI extends JFrame implements Observer{
         isCommand = true;
       }
       if(isCommand){
+        Selection s = Editor.getInstance().getSelection();
+        int caret = panel.getCaretPosition();
         switch(e.getKeyCode()){
-            case KeyEvent.VK_I : Cut c = new Cut(Editor.getInstance().getSelection());c.execute();
+            case KeyEvent.VK_I : Cut c = new Cut(s);
+                                  c.execute();
+                                  panel.moveCaretPosition(caret);panel.select(caret,caret);
             break;
-            case KeyEvent.VK_O : Copy co = new Copy(Editor.getInstance().getSelection());co.execute();
+            case KeyEvent.VK_O : Copy co = new Copy(s);co.execute();
             break;
-            case KeyEvent.VK_P : Paste p = new Paste(Editor.getInstance().getSelection());p.execute();
+            case KeyEvent.VK_P :int length = Text.getInstance().getLength();
+                                Paste p = new Paste(s);
+                                p.execute();
+                                panel.moveCaretPosition(caret+Text.getInstance().getLength()-length);
+                                panel.select(panel.getCaretPosition(),panel.getCaretPosition());
+                                Editor.getInstance().setSelection(new Selection(panel.getCaretPosition(),0));
+            break;
+            case KeyEvent.VK_R :Remove r = new Remove(s);
+                                r.execute();
+                                panel.moveCaretPosition(caret);
+                                panel.select(caret,caret);
+                                Editor.getInstance().setSelection(new Selection(panel.getCaretPosition(),0));
+            break;
+            case KeyEvent.VK_E :RemoveAt ra = new RemoveAt(caret-1);
+                                ra.execute();
+                                caret = caret-1;
+                                panel.moveCaretPosition(caret);
+                                panel.select(caret,caret);
             break;
             default:;
         }
+      }else{
+        int caret = panel.getCaretPosition();
+        Append a = new Append(e.getKeyChar(),caret);
+        a.execute();
+        panel.setCaretPosition(caret+1);
       }
     }
     public void keyReleased(KeyEvent e){
       if(e.getKeyCode()==KeyEvent.VK_CONTROL){
         isCommand = false;
       }
-      Text.getInstance().setText(panel.getText());
+      //Text.getInstance().setText(panel.getText());
     }
     public void keyTyped(KeyEvent e){
 
