@@ -1,0 +1,9 @@
+Fichier décrivant les listes de tests:
+* Voir si append écrit bien ce qu'on lui demande
+* Supprimer une selection vide
+* Insérer un texte vide dans le buffer
+* Copie d'un texte vide inefficace
+* Voir si la longueur de la selection correspond à la selection
+* Voir si removeAt supprime bien le texte que l'on souhaite supprimer
+* Voir si la selection collé est bien celle que l'on souhaite
+* Voir lors du cut si la taille du texte est bien modifié, la selection présente dans le clipboard et la taille du texte modifié

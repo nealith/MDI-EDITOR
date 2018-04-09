@@ -112,4 +112,8 @@ public class Text extends Observable {
   public String getText(){
     return buffer.toString();
   }
+
+  public String getClipboardForText(){
+    return clipboard.getContent();
+  }
 }
