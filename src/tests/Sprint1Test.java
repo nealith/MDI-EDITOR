@@ -6,12 +6,18 @@ import java.io.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import model.*;
+import org.junit.Before;
 
 
 public class Sprint1Test{
 
   public static void main ( String[] args ) {
       JUnitCore.main("test.Sprint1Test");
+  }
+
+  @Before
+  public void createEmptyText(){
+    Text.reset();
   }
 
   /**
@@ -104,7 +110,7 @@ public class Sprint1Test{
       txt.append(txtToModif.charAt(i),i);
     }
     for(int j = 0; j < 11; j++){
-      txt.removeAt(txtToModif.length()-j);
+      txt.removeAt(txtToModif.length()-1-j);
     }
     assertTrue(txt.getText().equals("On va manger"));
   }
@@ -116,7 +122,7 @@ public class Sprint1Test{
     for (int i = 0; i<txtToModif.length(); i++) {
       txt.append(txtToModif.charAt(i),i);
     }
-    for(int j = 18; j > 12; j--){
+    for(int j = "On va manger avec ".length()-1; j >= "On va manger ".length(); j--){
       txt.removeAt(j);
     }
     assertTrue(txt.getText().equals("On va manger les enfants!"));
@@ -129,7 +135,8 @@ public class Sprint1Test{
     for (int i = 0; i<txtToModif.length(); i++) {
       txt.append(txtToModif.charAt(i),i);
     }
-    for(int j = 10; j > 0; j--){
+
+    for(int j = "Georges! ".length()-1; j >= 0; j--){
       txt.removeAt(j);
     }
     assertTrue(txt.getText().equals("Georges est un faschiste de merde!"));
@@ -156,8 +163,8 @@ public class Sprint1Test{
     for (int i = 0; i<txtToModif.length(); i++) {
       txt.append(txtToModif.charAt(i),i);
     }
-    Selection sl = new Selection(20, 26);
-    Selection endLine = new Selection(45, 9);
+    Selection sl = new Selection("je ne sais pas quoi".length(), " écrire".length());
+    Selection endLine = new Selection("je ne sais pas quoi écrire mais je sais quoi".length(), " remplacer".length());
     txt.copy(sl); //on met la séléction dans le clipboard
     txt.paste(endLine); //et on la colle à la fin
     assertTrue(txt.getText().equals("je ne sais pas quoi écrire mais je sais quoi écrire"));

@@ -13,7 +13,7 @@ import view.UI;
 
 public class Text extends Observable {
 
-  static private Text texte = null;
+  static private Text text = null;
   /**
 	 * The object that contains the
 	 */
@@ -30,10 +30,16 @@ public class Text extends Observable {
 	}
 
   static public Text getInstance(){
-    if(texte==null){
-      texte = new Text();
+    if(text==null){
+      text = new Text();
     }
-    return texte;
+    return text;
+  }
+
+  static public void reset(){
+    if(text!=null){
+      text = new Text();
+    }
   }
 
 	/**
@@ -81,7 +87,7 @@ public class Text extends Observable {
 	}
 
 	/**
-	 //* Copy the selection on the clipboard and remove it from the texte
+	 //* Copy the selection on the clipboard and remove it from the text
 	 * @param selection The text to cut
 	 */
 	public void cut(Selection selection){
@@ -134,4 +140,9 @@ public class Text extends Observable {
   public int getLength(){
     return buffer.length();
   }
+
+  public String getClipboardForText(){
+    return this.clipboard.getContent();
+  }
+
 }
