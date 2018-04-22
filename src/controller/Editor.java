@@ -73,4 +73,8 @@ public class Editor{
     return !redos.empty();
   }
 
+  public void takeCare(){
+    undos.puch(Text.getInstance().createMemento());
+  }
+
 }

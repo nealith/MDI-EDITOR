@@ -11,7 +11,7 @@ import java.util.Observable;
 import model.ClipBoard;
 import view.UI;
 
-public class Text extends Observable {
+public class Text extends Observable implements Originator {
 
   static private Text text = null;
   /**
@@ -143,6 +143,15 @@ public class Text extends Observable {
 
   public String getClipboardForText(){
     return this.clipboard.getContent();
+  }
+
+  public Memento createMemento(){
+    return new TextMemento(new StringBuffer(buffer.toString()),new ClipBoard(this.clipboard.getContent()));
+  }
+
+  public void restore(Memento m){
+    this.buffer = m.getBuffer();
+    this.clipboard = m.getClipboard();
   }
 
 }

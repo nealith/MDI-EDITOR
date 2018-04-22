@@ -6,24 +6,16 @@ public class TextMemento implements Memento{
   private BufferString buffer;
   private ClipBoard clipBoard;
 
-  public TextMemento(BufferString buffer, ClipBoard cl){
+  public TextMemento(BufferString buffer, ClipBoard clipBoard){
     this.buffer = buffer;
-    this.clipBoard = cl;
+    this.clipBoard = clipBoard;
   }
 
-  public ClipBoard get_clipBoard(){
+  public ClipBoard getClipBoard(){
     return this.clipBoard;
   }
 
-  public void set_clipBoard(ClipBoard new_clipBoard){
-    this.clipBoard = new_clipBoard;
-  }
-
-  public BufferString get_buffer(){
+  public BufferString getBuffer(){
     return this.buffer;
-  }
-
-  public void set_buffer(BufferString new_buffer){
-    this.buffer = new_buffer;
   }
 }
