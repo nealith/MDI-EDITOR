@@ -1157,7 +1157,8 @@ clipBoard</panel_attributes>
 +past(selection : Selection) : void
 +copy(selection : Selection) : void
 +cut(selection : Selection) : void
-+remove(selection : Selection) : void</panel_attributes>
++remove(selection : Selection) : void
++clipBoardHasContent() : boolean</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -1252,7 +1253,7 @@ Selection)</panel_attributes>
       <x>96</x>
       <y>2896</y>
       <w>216</w>
-      <h>184</h>
+      <h>224</h>
     </coordinates>
     <panel_attributes>Editor
 --
@@ -1267,6 +1268,9 @@ Selection)</panel_attributes>
 +getView() : UI
 +undo() : void
 +redo() : void
++canUndo() : boolean
++canRedo() : boolean
++takeCare() : void
 </panel_attributes>
     <additional_attributes/>
   </element>
@@ -1442,7 +1446,7 @@ bg=green</panel_attributes>
       <x>80</x>
       <y>2864</y>
       <w>248</w>
-      <h>232</h>
+      <h>272</h>
     </coordinates>
     <panel_attributes>Controller
 --
