@@ -1,10 +1,10 @@
 package view;
 
-import javax.swing.JFrame;
-import javax.swing.JTextArea;
+import javax.swing.*;
 import java.util.Observer;
 import java.util.Observable;
 import java.awt.event.*;
+import java.awt.*;
 import controller.*;
 import model.*;
 import commands.*;
@@ -15,15 +15,58 @@ public class UI extends JFrame implements Observer{
 
   static private UI ui = null;
   private JTextArea editorPanel;
+  private JToolBar toolbar;
 
   private UI(){
+
+    //Toolbar Init
+    this.toolbar = new JToolBar("outils");
+    //CUT
+    JButton btn = new JButton("Cut");
+    btn.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent e){
+        UI.getInstance().cut();
+      }
+    });
+    this.toolbar.add(btn);
+
+    //COPY
+    btn = new JButton("Copy");
+    btn.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent e){
+        UI.getInstance().copy();
+      }
+    });
+    this.toolbar.add(btn);
+
+    //PASTE
+    btn = new JButton("Paste");
+    btn.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent e){
+        UI.getInstance().paste();
+      }
+    });
+    this.toolbar.add(btn);
+
+    //REMOVE
+    btn = new JButton("Remove");
+    btn.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent e){
+        UI.getInstance().remove();
+      }
+    });
+    this.toolbar.add(btn);
+
     // Panel Init
     this.editorPanel = new JTextArea();
-    this.setContentPane(this.editorPanel);
     this.editorPanel.setEditable(false);
     this.editorPanel.getCaret().setVisible(true);
     this.editorPanel.setLineWrap(true);
     this.editorPanel.setWrapStyleWord(true);
+
+    this.setLayout(new BorderLayout());
+    this.getContentPane().add(toolbar, BorderLayout.PAGE_START);
+    this.getContentPane().add(this.editorPanel);
     // Windows init
     this.setTitle("Editeur");
     this.setSize(500,450);
@@ -56,12 +99,53 @@ public class UI extends JFrame implements Observer{
   **/
   public void update(Observable o, Object arg){
     editorPanel.setText(Text.getInstance().getText());
+    editorPanel.getCaret().setVisible(true);
   }
 
-  // Test de l'interface utilisateur
-  /*public static void main(String[] args) {
-    UI u = UI.getInstance();
-  }*/
+  //Commands
+
+  public void cut(){
+    Selection s = Editor.getInstance().getSelection();
+    int caret = editorPanel.getCaretPosition();
+    Cut c = new Cut(s);
+    c.execute();
+    editorPanel.moveCaretPosition(caret);
+    editorPanel.select(caret,caret);
+    Editor.getInstance().setSelection(new Selection(editorPanel.getCaretPosition(),0));
+  }
+
+  public void copy(){
+    Selection s = Editor.getInstance().getSelection();
+    Copy co = new Copy(s);co.execute();
+  }
+
+  public void paste(){
+    Selection s = Editor.getInstance().getSelection();
+    int caret = editorPanel.getCaretPosition();
+    int length = Text.getInstance().getLength();
+    Paste p = new Paste(s);
+    p.execute();
+    editorPanel.moveCaretPosition(caret+Text.getInstance().getLength()-length);
+    editorPanel.select(editorPanel.getCaretPosition(),editorPanel.getCaretPosition());
+    Editor.getInstance().setSelection(new Selection(editorPanel.getCaretPosition(),0));
+  }
+
+  public void remove(){
+    Selection s = Editor.getInstance().getSelection();
+    int caret = editorPanel.getCaretPosition();
+    if(s.getLength()>0){
+      Remove r = new Remove(s);
+      r.execute();
+      Editor.getInstance().setSelection(new Selection(editorPanel.getCaretPosition(),0));
+    }else{
+      RemoveAt ra = new RemoveAt(caret-1);
+      ra.execute();
+      caret = caret-1;
+    }
+    editorPanel.moveCaretPosition(caret);
+    editorPanel.select(caret,caret);
+  }
+
 
   class SelectionListener implements MouseListener{
 
@@ -110,33 +194,25 @@ public class UI extends JFrame implements Observer{
         Selection s = Editor.getInstance().getSelection();
         int caret = panel.getCaretPosition();
         switch(e.getKeyCode()){
-            case KeyEvent.VK_I : Cut c = new Cut(s);
-                                  c.execute();
-                                  panel.moveCaretPosition(caret);panel.select(caret,caret);
-                                  Editor.getInstance().setSelection(new Selection(panel.getCaretPosition(),0));
+            case KeyEvent.VK_I : UI.getInstance().cut();
             break;
-            case KeyEvent.VK_O : Copy co = new Copy(s);co.execute();
+            case KeyEvent.VK_O : UI.getInstance().copy();
             break;
-            case KeyEvent.VK_P :int length = Text.getInstance().getLength();
-                                Paste p = new Paste(s);
-                                p.execute();
-                                panel.moveCaretPosition(caret+Text.getInstance().getLength()-length);
-                                panel.select(panel.getCaretPosition(),panel.getCaretPosition());
-                                Editor.getInstance().setSelection(new Selection(panel.getCaretPosition(),0));
+            case KeyEvent.VK_P :UI.getInstance().paste();
             break;
-            case KeyEvent.VK_R :Remove r = new Remove(s);
-                                r.execute();
-                                panel.moveCaretPosition(caret);
-                                panel.select(caret,caret);
-                                Editor.getInstance().setSelection(new Selection(panel.getCaretPosition(),0));
-            break;
-            case KeyEvent.VK_E :RemoveAt ra = new RemoveAt(caret-1);
-                                ra.execute();
-                                caret = caret-1;
-                                panel.moveCaretPosition(caret);
-                                panel.select(caret,caret);
-            break;
+
+
             default:;
+        }
+      }else{
+        if(e.getKeyCode()==KeyEvent.VK_BACK_SPACE){
+          UI.getInstance().remove();
+        }else if(!e.isActionKey()
+        ){
+          int caret = panel.getCaretPosition();
+          Append a = new Append(e.getKeyChar(),caret);
+          a.execute();
+          panel.setCaretPosition(caret+1);
         }
       }
     }
@@ -147,13 +223,7 @@ public class UI extends JFrame implements Observer{
       //Text.getInstance().setText(panel.getText());
     }
     public void keyTyped(KeyEvent e){
-      if(!e.isActionKey() && !isCommand
-      ){
-        int caret = panel.getCaretPosition();
-        Append a = new Append(e.getKeyChar(),caret);
-        a.execute();
-        panel.setCaretPosition(caret+1);
-      }
+
     }
   }
 }
