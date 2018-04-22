@@ -8,7 +8,6 @@ public class Editor{
 
   private UI main_window;
   private Text texte;
-  private Selection selection;
   static private Editor editeur = null;
 
   private Stack<Memento> undos;
@@ -17,7 +16,6 @@ public class Editor{
   private Editor(){
     main_window = UI.getInstance();
     texte = Text.getInstance();
-    selection = new Selection(0,0);
     undos = new Stack<Memento>();
     redos = new Stack<Memento>();
   }
@@ -35,14 +33,6 @@ public class Editor{
 
   public UI getUI(){
     return this.main_window;
-  }
-
-  public void setSelection(Selection sel){
-    selection = sel;
-  }
-
-  public Selection getSelection(){
-    return selection;
   }
 
   public static void main(String[] args) {
@@ -75,6 +65,10 @@ public class Editor{
 
   public void takeCare(){
     undos.push(Text.getInstance().createMemento());
+  }
+
+  public void clearRedos(){
+    redos.clear();
   }
 
 }

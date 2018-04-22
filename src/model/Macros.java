@@ -8,6 +8,7 @@ public class Macros {
   static private Macros instance;
   private Map<String,Macro> macrosList;
   private boolean recording;
+  private String currentMacro;
 
   static public Macros getInstance(){
     if (instance == null) {
@@ -23,6 +24,7 @@ public class Macros {
 
   public void beginRecording(String name){
     this.recording = true;
+    this.currentMacro = name;
     this.macrosList.put(name,new Macro());
   }
 
@@ -32,7 +34,7 @@ public class Macros {
 
   public void record(RecordableCommand command){
     if (this.recording) {
-      this.macrosList.get(String.valueOf(macrosList.size()-1)).addCommand(command);
+      this.macrosList.get(currentMacro).addCommand(command);
     }
   }
 

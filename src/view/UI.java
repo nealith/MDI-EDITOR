@@ -19,9 +19,13 @@ public class UI extends JFrame implements Observer{
   private JButton cut,copy,paste,redo,undo,remove;
 
   private JTextField macro_name;
-  private JList macro_list;
+  private JList<String> macro_list;
   private JButton start_record, end_record;
   private JPanel rgt_panel;
+
+  private Selection selection;
+
+
   private UI(){
 
     //Toolbar Init
@@ -103,7 +107,7 @@ public class UI extends JFrame implements Observer{
 
     // Macro UI
 
-    this.macro_list = new JList();
+    this.macro_list = new JList<String>();
     this.macro_name = new JTextField();
     this.macro_name.setPreferredSize(new Dimension(20,20));
     this.start_record = new JButton("Creer la macro");
@@ -177,41 +181,55 @@ public class UI extends JFrame implements Observer{
   //Commands
 
   public void cut(){
-    Selection s = Editor.getInstance().getSelection();
     int caret = editorPanel.getCaretPosition();
-    Cut c = new Cut(s);
+    Cut c = new Cut(this.selection);
+    Editor.getInstance().takeCare();
     c.execute();
+    Editor.getInstance().clearRedos();
+    redo.setEnabled(false);
     editorPanel.moveCaretPosition(caret);
     editorPanel.select(caret,caret);
-    Editor.getInstance().setSelection(new Selection(editorPanel.getCaretPosition(),0));
+    this.selection = new Selection(editorPanel.getCaretPosition(),0);
   }
 
   public void copy(){
-    Selection s = Editor.getInstance().getSelection();
-    Copy co = new Copy(s);co.execute();
+    Copy co = new Copy(this.selection);
+    Editor.getInstance().takeCare();
+    co.execute();
+    Editor.getInstance().clearRedos();
+    redo.setEnabled(false);
   }
 
   public void paste(){
-    Selection s = Editor.getInstance().getSelection();
     int caret = editorPanel.getCaretPosition();
     int length = Text.getInstance().getLength();
-    Paste p = new Paste(s);
+    Paste p = new Paste(this.selection);
+    Editor.getInstance().takeCare();
     p.execute();
+    Editor.getInstance().clearRedos();
+    redo.setEnabled(false);
     editorPanel.moveCaretPosition(caret+Text.getInstance().getLength()-length);
     editorPanel.select(editorPanel.getCaretPosition(),editorPanel.getCaretPosition());
-    Editor.getInstance().setSelection(new Selection(editorPanel.getCaretPosition(),0));
+    this.selection = new Selection(editorPanel.getCaretPosition(),0);
   }
 
   public void remove(){
-    Selection s = Editor.getInstance().getSelection();
     int caret = editorPanel.getCaretPosition();
-    if(s.getLength()>0){
-      Remove r = new Remove(s);
+    if(this.selection.getLength()>0){
+      Remove r = new Remove(this.selection);
+      Editor.getInstance().takeCare();
+
       r.execute();
-      Editor.getInstance().setSelection(new Selection(editorPanel.getCaretPosition(),0));
+      Editor.getInstance().clearRedos();
+      redo.setEnabled(false);
+      this.selection = new Selection(editorPanel.getCaretPosition(),0);
     }else{
       RemoveAt ra = new RemoveAt(caret-1);
+      Editor.getInstance().takeCare();
+
       ra.execute();
+      Editor.getInstance().clearRedos();
+      redo.setEnabled(false);
       caret = caret-1;
     }
     editorPanel.moveCaretPosition(caret);
@@ -220,16 +238,29 @@ public class UI extends JFrame implements Observer{
 
   public void undo(){
     Editor.getInstance().undo();
+    if (!Editor.getInstance().canUndo()) {
+      undo.setEnabled(false);
+    }
+    if (Editor.getInstance().canRedo()) {
+      redo.setEnabled(true);
+    }
   }
 
   public void redo(){
     Editor.getInstance().redo();
+    if (Editor.getInstance().canUndo()) {
+      undo.setEnabled(true);
+    }
+    if (!Editor.getInstance().canRedo()) {
+      redo.setEnabled(false);
+    }
   }
 
   public void record(){
     if(macro_name.getText().length()>0){
       //RECORD
-
+      BeginRecording br = new BeginRecording(macro_name.getText());
+      br.execute();
       this.end_record.setEnabled(true);
       this.start_record.setEnabled(false);
     }
@@ -237,12 +268,16 @@ public class UI extends JFrame implements Observer{
 
   public void endRecord(){
     //Save record
+      EndRecording er = new EndRecording();
+      er.execute();
       this.end_record.setEnabled(false);
       this.start_record.setEnabled(true);
+      this.macro_list.setListData((String[]) Macros.getInstance().getListOfMacros().toArray(new String[1]));
   }
 
   public void playMacro(){
     // get name in List
+    Macros.getInstance().execute(macro_list.getSelectedValue());
   }
 
   class SelectionListener implements MouseListener{
@@ -268,7 +303,7 @@ public class UI extends JFrame implements Observer{
       int deb = panel.getSelectionStart();
       int len = panel.getSelectionEnd()-deb;
       //if(len>0){
-        Editor.getInstance().setSelection(new Selection(deb,len));
+        selection = new Selection(deb,len);
       //}
 
     }
@@ -289,7 +324,6 @@ public class UI extends JFrame implements Observer{
         isCommand = true;
       }
       if(isCommand){
-        Selection s = Editor.getInstance().getSelection();
         int caret = panel.getCaretPosition();
         switch(e.getKeyCode()){
             case KeyEvent.VK_I : UI.getInstance().cut();
@@ -312,7 +346,11 @@ public class UI extends JFrame implements Observer{
         ){
           int caret = panel.getCaretPosition();
           Append a = new Append(e.getKeyChar(),caret);
+          Editor.getInstance().takeCare();
+
           a.execute();
+          Editor.getInstance().clearRedos();
+          redo.setEnabled(false);
           panel.setCaretPosition(caret+1);
         }
       }
