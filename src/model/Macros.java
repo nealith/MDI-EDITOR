@@ -21,9 +21,9 @@ public class Macros {
     this.recording = false;
   }
 
-  public void beginRecording(){
+  public void beginRecording(String name){
     this.recording = true;
-    this.macrosList.put(String.valueOf(macrosList.size()),new Macro());
+    this.macrosList.put(name,new Macro());
   }
 
   public void endRecording(){

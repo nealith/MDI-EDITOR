@@ -4,12 +4,14 @@ import model.Macros;
 
 public class BeginRecording implements Command {
 
-  public BeginRecording(){
+  private String name;
 
+  public BeginRecording(String name){
+    this.name = name;
   }
 
   public void execute(){
-    Macros.getInstance().beginRecording();
+    Macros.getInstance().beginRecording(name);
   }
 
 }
