@@ -7,7 +7,7 @@ public class Macro implements Command {
   private String name;
   private List<RecordableCommand> commands;
 
-  Macro(){
+  public Macro(){
     commands = new LinkedList<RecordableCommand>();
   }
 
@@ -21,5 +21,12 @@ public class Macro implements Command {
 
   public String getName(){
     return this.name;
+  }
+
+  public void execute(){
+    Iterator<RecordableCommand> it = commands.iterator();
+    while(it.hasNext()){
+      it.next().execute();
+    }
   }
 }
