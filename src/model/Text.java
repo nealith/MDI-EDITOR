@@ -155,7 +155,7 @@ public class Text extends Observable implements Originator {
     this.buffer = m.getBuffer();
     this.clipboard = m.getClipboard();
 
-  public boolean ClipBoardHasContent(){
+  public boolean clipBoardHasContent(){
     return this.clipboard.getContent().length()>0;
   }
 
