@@ -16,7 +16,7 @@ public class Macros {
 
   public void beginRecording(){
     this.recording = true;
-    this.macros.put(String.valueOf(macros.size()),new Macro)
+    this.macros.put(String.valueOf(macros.size()),new Macro());
   }
 
   public void endRecording(){
@@ -28,8 +28,4 @@ public class Macros {
       this.macros.get(String.valueOf(macros.size()-1)).addCommand(command);
     }
   }
-
-
-
-
 }

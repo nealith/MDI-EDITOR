@@ -4,7 +4,7 @@ public class Selection{
 
   private int beginning;
   private int length;
-
+  private int reference;
 
   /**
   *
@@ -48,5 +48,21 @@ public class Selection{
   **/
   public void setLength(int l){
     if(l>0){this.length = l;}
+  }
+
+  /**
+   * Accessor to get reference value
+   * @return int the reference value
+   */
+  public int getReference(){
+    return this.reference;
+  }
+
+  /**
+   * Accessor to set the selection refernence value
+   * @param newRefValue the new refernce value.
+   */
+  public void setReference(int newRefValue){
+    this.reference = newRefValue;
   }
 }
