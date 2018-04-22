@@ -10,6 +10,10 @@ public class ClipBoard
       content = new String();
   }
 
+  public ClipBoard(String s){
+      content = s;
+  }
+
 
   public void setContent(String s){
     content = s;

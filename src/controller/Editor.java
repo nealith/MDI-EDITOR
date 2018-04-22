@@ -3,7 +3,7 @@ package controller;
 import commands.*;
 import view.*;
 import model.*;
-
+import java.util.Stack;
 public class Editor{
 
   private UI main_window;
@@ -65,16 +65,16 @@ public class Editor{
     }
   }
 
-  public void canUndo(){
+  public boolean canUndo(){
     return !undos.empty();
   }
 
-  public void canRedo(){
+  public boolean canRedo(){
     return !redos.empty();
   }
 
   public void takeCare(){
-    undos.puch(Text.getInstance().createMemento());
+    undos.push(Text.getInstance().createMemento());
   }
 
 }

@@ -153,8 +153,10 @@ public class Text extends Observable implements Originator {
 
   public void restore(Memento m){
     this.buffer = m.getBuffer();
-    this.clipboard = m.getClipboard();
-
+    this.clipboard = m.getClipBoard();
+    setChanged();
+    this.notifyObservers(UI.getInstance());
+  }
   public boolean clipBoardHasContent(){
     return this.clipboard.getContent().length()>0;
   }
