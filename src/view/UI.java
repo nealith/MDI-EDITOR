@@ -120,7 +120,7 @@ public class UI extends JFrame implements Observer{
   public void update(Observable o, Object arg){
     editorPanel.setText(Text.getInstance().getText());
     editorPanel.getCaret().setVisible(true);
-    this.paste.setEnabled(Text.getInstance().ClipBoardHasContent());
+    this.paste.setEnabled(Text.getInstance().clipBoardHasContent());
   }
 
   //Commands
@@ -168,15 +168,11 @@ public class UI extends JFrame implements Observer{
   }
 
   public void undo(){
-    Selection s = Editor.getInstance().getSelection();
-    int caret = editorPanel.getCaretPosition();
-
+    Editor.getInstance().undo();
   }
 
   public void redo(){
-    Selection s = Editor.getInstance().getSelection();
-    int caret = editorPanel.getCaretPosition();
-
+    Editor.getInstance().redo();
   }
 
 

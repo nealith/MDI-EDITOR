@@ -2,11 +2,12 @@ package model;
 
 import model.Memento;
 
+
 public class TextMemento implements Memento{
-  private BufferString buffer;
+  private StringBuffer buffer;
   private ClipBoard clipBoard;
 
-  public TextMemento(BufferString buffer, ClipBoard clipBoard){
+  public TextMemento(StringBuffer buffer, ClipBoard clipBoard){
     this.buffer = buffer;
     this.clipBoard = clipBoard;
   }
@@ -15,7 +16,7 @@ public class TextMemento implements Memento{
     return this.clipBoard;
   }
 
-  public BufferString getBuffer(){
+  public StringBuffer getBuffer(){
     return this.buffer;
   }
 }
