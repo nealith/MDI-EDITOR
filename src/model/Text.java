@@ -83,6 +83,8 @@ public class Text extends Observable {
     String s = new String();
 		s = buffer.substring(selection.getBeginning(), selection.getBeginning()+selection.getLength());
 		clipboard.setContent(s);
+    setChanged();
+    this.notifyObservers(UI.getInstance());
     }
 	}
 
@@ -143,6 +145,10 @@ public class Text extends Observable {
 
   public String getClipboardForText(){
     return this.clipboard.getContent();
+  }
+
+  public boolean ClipBoardHasContent(){
+    return this.clipboard.getContent().length()>0;
   }
 
 }
