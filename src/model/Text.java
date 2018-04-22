@@ -83,6 +83,8 @@ public class Text extends Observable implements Originator {
     String s = new String();
 		s = buffer.substring(selection.getBeginning(), selection.getBeginning()+selection.getLength());
 		clipboard.setContent(s);
+    setChanged();
+    this.notifyObservers(UI.getInstance());
     }
 	}
 
@@ -152,6 +154,9 @@ public class Text extends Observable implements Originator {
   public void restore(Memento m){
     this.buffer = m.getBuffer();
     this.clipboard = m.getClipboard();
+
+  public boolean ClipBoardHasContent(){
+    return this.clipboard.getContent().length()>0;
   }
 
 }

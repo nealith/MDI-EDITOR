@@ -16,46 +16,66 @@ public class UI extends JFrame implements Observer{
   static private UI ui = null;
   private JTextArea editorPanel;
   private JToolBar toolbar;
+  private JButton cut,copy,paste,redo,undo,remove;
 
   private UI(){
 
     //Toolbar Init
     this.toolbar = new JToolBar("outils");
     //CUT
-    JButton btn = new JButton("Cut");
-    btn.addActionListener(new ActionListener(){
+    this.cut = new JButton("Cut");
+    this.cut.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent e){
         UI.getInstance().cut();
       }
     });
-    this.toolbar.add(btn);
+    this.toolbar.add(this.cut);
 
     //COPY
-    btn = new JButton("Copy");
-    btn.addActionListener(new ActionListener(){
+    this.copy = new JButton("Copy");
+    this.copy.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent e){
         UI.getInstance().copy();
       }
     });
-    this.toolbar.add(btn);
+    this.toolbar.add(this.copy);
 
     //PASTE
-    btn = new JButton("Paste");
-    btn.addActionListener(new ActionListener(){
+    this.paste = new JButton("Paste");
+    this.paste.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent e){
         UI.getInstance().paste();
       }
     });
-    this.toolbar.add(btn);
+    this.toolbar.add(this.paste);
+    this.paste.setEnabled(false);
 
     //REMOVE
-    btn = new JButton("Remove");
-    btn.addActionListener(new ActionListener(){
+    this.remove = new JButton("Remove");
+    this.remove.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent e){
         UI.getInstance().remove();
       }
     });
-    this.toolbar.add(btn);
+    this.toolbar.add(this.remove);
+
+    //UNDO
+    this.undo = new JButton("Undo");
+    this.undo.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent e){
+        UI.getInstance().undo();
+      }
+    });
+    this.toolbar.add(this.undo);
+
+    //REDO
+    this.redo = new JButton("Redo");
+    this.redo.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent e){
+        UI.getInstance().redo();
+      }
+    });
+    this.toolbar.add(this.redo);
 
     // Panel Init
     this.editorPanel = new JTextArea();
@@ -100,6 +120,7 @@ public class UI extends JFrame implements Observer{
   public void update(Observable o, Object arg){
     editorPanel.setText(Text.getInstance().getText());
     editorPanel.getCaret().setVisible(true);
+    this.paste.setEnabled(Text.getInstance().ClipBoardHasContent());
   }
 
   //Commands
@@ -144,6 +165,18 @@ public class UI extends JFrame implements Observer{
     }
     editorPanel.moveCaretPosition(caret);
     editorPanel.select(caret,caret);
+  }
+
+  public void undo(){
+    Selection s = Editor.getInstance().getSelection();
+    int caret = editorPanel.getCaretPosition();
+
+  }
+
+  public void redo(){
+    Selection s = Editor.getInstance().getSelection();
+    int caret = editorPanel.getCaretPosition();
+
   }
 
 
@@ -200,7 +233,10 @@ public class UI extends JFrame implements Observer{
             break;
             case KeyEvent.VK_P :UI.getInstance().paste();
             break;
-
+            case KeyEvent.VK_Z :UI.getInstance().undo();
+            break;
+            case KeyEvent.VK_E :UI.getInstance().redo();
+            break;
 
             default:;
         }
