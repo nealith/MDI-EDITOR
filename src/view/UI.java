@@ -18,6 +18,10 @@ public class UI extends JFrame implements Observer{
   private JToolBar toolbar;
   private JButton cut,copy,paste,redo,undo,remove;
 
+  private JTextField macro_name;
+  private JList macro_list;
+  private JButton start_record, end_record;
+  private JPanel rgt_panel;
   private UI(){
 
     //Toolbar Init
@@ -86,7 +90,7 @@ public class UI extends JFrame implements Observer{
 
     this.setLayout(new BorderLayout());
     this.getContentPane().add(toolbar, BorderLayout.PAGE_START);
-    this.getContentPane().add(this.editorPanel);
+    this.getContentPane().add(this.editorPanel,BorderLayout.CENTER);
     // Windows init
     this.setTitle("Editeur");
     this.setSize(500,450);
@@ -95,6 +99,53 @@ public class UI extends JFrame implements Observer{
 
     editorPanel.addMouseListener(new SelectionListener(this.editorPanel));
     editorPanel.addKeyListener(new CommandListener(this.editorPanel));
+
+
+    // Macro UI
+
+    this.macro_list = new JList();
+    this.macro_name = new JTextField();
+    this.macro_name.setPreferredSize(new Dimension(20,20));
+    this.start_record = new JButton("Creer la macro");
+    this.end_record = new JButton("Enregister la macro");
+    this.end_record.setEnabled(false);
+
+    this.start_record.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent e){
+        UI.getInstance().record();
+      }
+    });
+
+    this.end_record.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent e){
+        UI.getInstance().endRecord();
+      }
+    });
+
+    this.macro_list.addMouseListener(new MouseListener(){
+      public void mouseClicked(MouseEvent e){
+        UI.getInstance().playMacro();
+      }
+      public void mouseEntered(MouseEvent e){}
+
+      public void 	mouseExited(MouseEvent e){}
+
+      public void 	mousePressed(MouseEvent e){}
+
+      public void 	mouseReleased(MouseEvent e){}
+    });
+
+    this.rgt_panel = new JPanel();
+    rgt_panel.setLayout(new BoxLayout(rgt_panel, BoxLayout.Y_AXIS));
+    rgt_panel.add(new JLabel("Nom de la macro"));
+    rgt_panel.add(this.macro_name);
+    rgt_panel.add(Box.createVerticalStrut(25));
+    rgt_panel.add(this.start_record);
+    rgt_panel.add(Box.createVerticalStrut(25));
+    rgt_panel.add(this.end_record);
+    rgt_panel.add(Box.createVerticalStrut(25));
+    rgt_panel.add(this.macro_list);
+    this.getContentPane().add(this.rgt_panel,BorderLayout.EAST);
   }
 
 
@@ -175,6 +226,24 @@ public class UI extends JFrame implements Observer{
     Editor.getInstance().redo();
   }
 
+  public void record(){
+    if(macro_name.getText().length()>0){
+      //RECORD
+
+      this.end_record.setEnabled(true);
+      this.start_record.setEnabled(false);
+    }
+  }
+
+  public void endRecord(){
+    //Save record
+      this.end_record.setEnabled(false);
+      this.start_record.setEnabled(true);
+  }
+
+  public void playMacro(){
+    // get name in List
+  }
 
   class SelectionListener implements MouseListener{
 
