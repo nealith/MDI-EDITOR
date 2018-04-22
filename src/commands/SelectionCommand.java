@@ -2,7 +2,7 @@ package commands;
 
 import model.Selection;
 
-public class SelectionCommand implements RecordableCommand{
+public class SelectionCommand extends RecordableCommand{
 
   protected Selection selection;
 
@@ -10,7 +10,9 @@ public class SelectionCommand implements RecordableCommand{
     this.selection = selection;
   }
 
-  public void execute(){}
+  public void execute(){
+    super.execute();
+  }
 
 
 }

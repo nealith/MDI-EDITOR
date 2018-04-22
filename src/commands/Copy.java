@@ -10,6 +10,7 @@ public class Copy extends SelectionCommand{
   }
 
   public void execute(){
+    super.execute();
     Text.getInstance().copy(this.selection);
   }
 

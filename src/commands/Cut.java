@@ -10,6 +10,7 @@ public class Cut extends SelectionCommand{
   }
 
   public void execute(){
+    super.execute();
     Text.getInstance().cut(this.selection);
   }
 

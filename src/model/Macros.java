@@ -1,23 +1,29 @@
 package model;
 
-import java.util.Map;
-import java.util.TreeMap;
-import command.Macro;
-import command.RecordableCommand;
+import java.util.*;
+import commands.*;
 
 public class Macros {
 
-  private Map<String,Macro> macros;
+  static private Macros instance;
+  private Map<String,Macro> macrosList;
   private boolean recording;
 
-  public Macros(){
-    this.macros = new TreeMap<String,Macro>();
+  static public Macros getInstance(){
+    if (instance == null) {
+      instance = new Macros();
+    }
+    return instance;
+  }
+
+  private Macros(){
+    this.macrosList = new TreeMap<String,Macro>();
     this.recording = false;
   }
 
   public void beginRecording(){
     this.recording = true;
-    this.macros.put(String.valueOf(macros.size()),new Macro());
+    this.macrosList.put(String.valueOf(macrosList.size()),new Macro());
   }
 
   public void endRecording(){
@@ -26,15 +32,15 @@ public class Macros {
 
   public void record(RecordableCommand command){
     if (this.recording) {
-      this.macros.get(String.valueOf(macros.size()-1)).addCommand(command);
+      this.macrosList.get(String.valueOf(macrosList.size()-1)).addCommand(command);
     }
   }
 
   public void execute(String name){
-    macros.get(name).execute();
+    macrosList.get(name).execute();
   }
 
-  public Set<String> void getListOfMacros(){
-    return macros.keySet();
+  public Set<String> getListOfMacros(){
+    return macrosList.keySet();
   }
 }

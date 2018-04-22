@@ -2,7 +2,6 @@ package commands;
 
 import java.util.List;
 import java.util.LinkedList;
-import command.RecordableCommand;
 import java.util.*;
 
 public class Macro implements Command {

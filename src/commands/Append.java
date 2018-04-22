@@ -2,7 +2,7 @@ package commands;
 
 import model.Text;
 
-public class Append implements RecordableCommand {
+public class Append extends RecordableCommand {
 
   private char character;
   private int pos;
@@ -13,6 +13,7 @@ public class Append implements RecordableCommand {
   }
 
   public void execute(){
+    super.execute();
     Text.getInstance().append(this.character,this.pos);
   }
 }

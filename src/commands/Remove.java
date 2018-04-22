@@ -10,6 +10,7 @@ public class Remove extends SelectionCommand{
   }
 
   public void execute(){
+    super.execute();    
     Text.getInstance().remove(this.selection);
   }
 

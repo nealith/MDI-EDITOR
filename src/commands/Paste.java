@@ -10,6 +10,7 @@ public class Paste extends SelectionCommand{
   }
 
   public void execute(){
+    super.execute();    
     Text.getInstance().paste(this.selection);
   }
 
