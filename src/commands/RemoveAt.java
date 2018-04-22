@@ -3,7 +3,7 @@ package commands;
 import model.Text;
 import model.Selection;
 
-public class RemoveAt implements Command{
+public class RemoveAt implements RecordableCommand{
 
   private int pos;
 

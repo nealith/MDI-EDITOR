@@ -2,7 +2,7 @@ package commands;
 
 import model.Text;
 
-public class Append implements Command {
+public class Append implements RecordableCommand {
 
   private char character;
   private int pos;

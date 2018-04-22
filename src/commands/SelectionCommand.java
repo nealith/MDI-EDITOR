@@ -2,7 +2,7 @@ package commands;
 
 import model.Selection;
 
-public class SelectionCommand implements Command{
+public class SelectionCommand implements RecordableCommand{
 
   protected Selection selection;
 
