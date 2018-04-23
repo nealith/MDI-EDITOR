@@ -71,4 +71,13 @@ public class Editor{
     redos.clear();
   }
 
+  public static void reset(){
+    if(editeur!=null){
+      editeur.main_window = UI.getInstance();
+      editeur.texte = Text.reset();
+      editeur.undos = new Stack<Memento>();
+      editeur.redos = new Stack<Memento>();
+    }
+  }
+
 }

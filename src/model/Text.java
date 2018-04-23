@@ -36,10 +36,11 @@ public class Text extends Observable implements Originator {
     return text;
   }
 
-  static public void reset(){
+  static public Text reset(){
     if(text!=null){
       text = new Text();
     }
+    return text;
   }
 
 	/**
