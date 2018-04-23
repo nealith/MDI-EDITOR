@@ -183,8 +183,11 @@ public class UI extends JFrame implements Observer{
   public void cut(){
     int caret = editorPanel.getCaretPosition();
     Cut c = new Cut(this.selection);
-    Editor.getInstance().takeCare();
+
+
     c.execute();
+    Editor.getInstance().takeCare();
+    undo.setEnabled(true);
     Editor.getInstance().clearRedos();
     redo.setEnabled(false);
     editorPanel.moveCaretPosition(caret);
@@ -194,8 +197,11 @@ public class UI extends JFrame implements Observer{
 
   public void copy(){
     Copy co = new Copy(this.selection);
-    Editor.getInstance().takeCare();
+
+
     co.execute();
+    Editor.getInstance().takeCare();
+    undo.setEnabled(true);
     Editor.getInstance().clearRedos();
     redo.setEnabled(false);
   }
@@ -204,8 +210,11 @@ public class UI extends JFrame implements Observer{
     int caret = editorPanel.getCaretPosition();
     int length = Text.getInstance().getLength();
     Paste p = new Paste(this.selection);
-    Editor.getInstance().takeCare();
+
+
     p.execute();
+    Editor.getInstance().takeCare();
+    undo.setEnabled(true);
     Editor.getInstance().clearRedos();
     redo.setEnabled(false);
     editorPanel.moveCaretPosition(caret+Text.getInstance().getLength()-length);
@@ -217,17 +226,21 @@ public class UI extends JFrame implements Observer{
     int caret = editorPanel.getCaretPosition();
     if(this.selection.getLength()>0){
       Remove r = new Remove(this.selection);
-      Editor.getInstance().takeCare();
+
 
       r.execute();
+      Editor.getInstance().takeCare();
+      undo.setEnabled(true);
       Editor.getInstance().clearRedos();
       redo.setEnabled(false);
       this.selection = new Selection(editorPanel.getCaretPosition(),0);
     }else{
       RemoveAt ra = new RemoveAt(caret-1);
-      Editor.getInstance().takeCare();
+
 
       ra.execute();
+      Editor.getInstance().takeCare();
+      undo.setEnabled(true);
       Editor.getInstance().clearRedos();
       redo.setEnabled(false);
       caret = caret-1;
@@ -346,9 +359,11 @@ public class UI extends JFrame implements Observer{
         ){
           int caret = panel.getCaretPosition();
           Append a = new Append(e.getKeyChar(),caret);
-          Editor.getInstance().takeCare();
+
 
           a.execute();
+          Editor.getInstance().takeCare();
+          undo.setEnabled(true);
           Editor.getInstance().clearRedos();
           redo.setEnabled(false);
           panel.setCaretPosition(caret+1);

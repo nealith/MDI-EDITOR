@@ -153,7 +153,7 @@ public class Text extends Observable implements Originator {
   }
 
   public void restore(Memento m){
-    this.buffer = m.getBuffer();
+    this.buffer = new StringBuffer(m.getBuffer());
     this.clipboard = m.getClipBoard();
     setChanged();
     this.notifyObservers(UI.getInstance());
