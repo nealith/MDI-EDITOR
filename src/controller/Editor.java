@@ -18,6 +18,7 @@ public class Editor{
     texte = Text.getInstance();
     undos = new Stack<Memento>();
     redos = new Stack<Memento>();
+    takeCare();
   }
 
   static public Editor getInstance(){
